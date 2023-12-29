@@ -9,7 +9,7 @@ class IM:
         self.output_images = fol_o
 
     def magnifier(self, x, y):
-        for images in list(filter(lambda i: i.endswith(".png") or i.endswith(".jpg") or i.endswith(".jpeg"),
+        for images in list(filter(lambda s: s.endswith(".png") or s.endswith(".jpg") or s.endswith(".jpeg"),
                                   os.listdir(self.input_images))):
             # working with image
             im = Image.open(self.input_images + "/" + images)
@@ -17,9 +17,14 @@ class IM:
             x1, y1 = im.size
             n = min(x // x1, y // y1)
             im1 = Image.new('RGBA', (int(x1) * n, int(y1) * n), (255, 255, 255, 0))
-            newdata = [(data[i * x1 + j] * n for j in range(x1) for _ in range(n) for i in range(y1))
-                       if n > 1 else data]
-
+            if n > 1:
+                newdata = []
+                for i in range(y1):
+                    for _ in range(n):
+                        for j in range(x1):
+                            newdata += [data[i * x1 + j]] * n
+            else:
+                newdata = data
             # save new image
             self.save_file(images, newdata, im1)
 
@@ -42,6 +47,6 @@ class IM:
 
     def save_file(self, name, data, image):
         if data:
+            print(name)
             image.putdata(data)
             image.save(f"{self.output_images}/{name}")
-            print(name)

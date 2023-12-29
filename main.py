@@ -36,7 +36,7 @@ def check_files(fol):
 class GUI_IM:
     def __init__(self):
         self.root = Tk()
-        self.root.title('Background deleter')
+        self.root.title('Image Magnifier')
         self.root.geometry('330x175')
 
         self.F_input = False
